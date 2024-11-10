@@ -1,33 +1,27 @@
 const mongoose = require('mongoose')
 
-const vendor = new mongoose.Schema(
+const user = new mongoose.Schema(
   {
-    vendorName: {
+    userName: {
       type: String,
       require: true
     },
-    vendorPhone: {
+    userPhone: {
       type: String,
       require: true
     },
-    vendorEmail: {
+    userEmail: {
       type: String,
       require: true
     },
-    vendorProfilePic: {
-      type: String
-    },
-    aadharCard: {
-      type: String
-    },
-    panCard: {
+    userProfilePic: {
       type: String
     },
     password: {
       type: String,
       require: true
     },
-    vendorDOB: {
+    userDOB: {
       type: String,
       require: true
     },
@@ -35,17 +29,9 @@ const vendor = new mongoose.Schema(
       type: String,
       require: true
     },
-    amountQuoted: {
-      type: String,
-      require: true
-    },
-    shopId: {
-      type: String,
-      require: true
-    },
     isActive: {
       type: Boolean,
-      default: false
+      default: true
     },
     isDeleted: {
       type: Boolean,
@@ -57,6 +43,6 @@ const vendor = new mongoose.Schema(
   }
 )
 
-const Vendor = mongoose.model('Vendor', vendor)
+const User = mongoose.model('User', user)
 
-module.exports = Vendor
+module.exports = User

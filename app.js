@@ -9,7 +9,7 @@ dotEnv.config()
 app.get('/', (req, res) => {
   res.send('Hello World')
 })
-const routes = require('./routes/routes')
+const routes = require('./routes/userRoutes')
 
 app.use('/v1', routes)
 
