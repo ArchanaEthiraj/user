@@ -67,44 +67,55 @@ const addUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    let id = req.params.id
+    let id = req.user.id
+
+    if(!id){
+      return res.status(400).json({ message: 'Id Required' })
+    }
     let updateUser = req.body
     await User.findByIdAndUpdate({ _id: id }, updateUser)
-    res.status(200).json({ message: 'Updated Successfully!' })
+    return res.status(200).json({ message: 'Updated Successfully!' })
   } catch (error) {
     console.log('error', error)
-    res.status(500).json({ message: 'Error while Updating', error: error })
+    return res.status(500).json({ message: 'Error while Updating', error: error })
   }
 }
 
 const getByIdUser = async (req, res) => {
   try {
-    let id = req.params.id
+    let id = req.user.id
+    if(!id){
+      return res.status(400).json({ message: 'Id Required' })
+    }
     let data = await User.findById({ _id: id })
-    res.status(200).json({ message: 'User Data', data: data })
+    return res.status(200).json({ message: 'User Data', data: data })
   } catch (error) {
     console.log('error', error)
-    res.status(500).json({ message: 'Error', error: error })
+    return res.status(500).json({ message: 'Error', error: error })
   }
 }
 
 const deleteUser = async (req, res) => {
   try {
-    let id = req.params.id
-    await User.findByIdAndDelete({ _id: id })
-    res.status(200).json({ message: 'Deleted Successfully!' })
+    let id = req.user.id
+    if(!id){
+      return res.status(400).json({ message: 'Id Required' })
+    }
+    let updateUser = { isDeleted: true }
+    await User.findByIdAndUpdate({ _id: id }, updateUser)
+    return res.status(200).json({ message: 'Deleted Successfully!' })
   } catch (error) {
     console.log('error', error)
-    res.status(500).json({ message: 'Error', error: error })
+    return res.status(500).json({ message: 'Error', error: error })
   }
 }
 
 const getAllUser = async (req, res) => {
   try {
-    let data = await User.find()
-    res.status(200).json({ message: 'Listed Successfully!', data: data })
+    let data = await User.find({ isDeleted: false })
+    return res.status(200).json({ message: 'Listed Successfully!', data: data })
   } catch (error) {
-    res.status(500).json({ message: 'Error', error: error })
+    return res.status(500).json({ message: 'Error', error: error })
   }
 }
 
