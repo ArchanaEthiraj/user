@@ -27,7 +27,7 @@ const createShop = async (req, res, next) => {
 
 const updateShop = async (req, res) => {
   try {
-    let id = req.user.id
+    let id = req.params.id
     if(!id){
       return res.status(400).json({ message: 'Id Required' })
     }
@@ -42,7 +42,7 @@ const updateShop = async (req, res) => {
 
 const getByIdShop = async (req, res) => {
   try {
-    let id = req.user.id
+    let id = req.params.id
     if(!id){
       return res.status(400).json({ message: 'Id Required' })
     }
@@ -56,7 +56,7 @@ const getByIdShop = async (req, res) => {
 
 const deleteShop = async (req, res) => {
   try {
-    let id = req.user.id
+    let id = req.params.id
     if(!id){
       return res.status(400).json({ message: 'Id Required' })
     }

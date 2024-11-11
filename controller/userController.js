@@ -67,7 +67,7 @@ const addUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    let id = req.user.id
+    let id = req.params.id
 
     if(!id){
       return res.status(400).json({ message: 'Id Required' })
@@ -83,7 +83,7 @@ const updateUser = async (req, res) => {
 
 const getByIdUser = async (req, res) => {
   try {
-    let id = req.user.id
+    let id = req.params.id
     if(!id){
       return res.status(400).json({ message: 'Id Required' })
     }
@@ -97,7 +97,7 @@ const getByIdUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    let id = req.user.id
+    let id = req.params.id
     if(!id){
       return res.status(400).json({ message: 'Id Required' })
     }

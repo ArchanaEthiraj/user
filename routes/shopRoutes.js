@@ -6,9 +6,9 @@ const router = express.Router()
 
 
 router.post('/create', authenticating, checkShopOwner, shopValidate, createShop)
-router.put('/update', authenticating, checkShopOwner, shopValidate, updateShop)
-router.delete('/delete', authenticating, checkShopOwner, deleteShop)
+router.put('/update/:id', authenticating, checkShopOwner, shopValidate, updateShop)
+router.delete('/delete/:id', authenticating, checkShopOwner, deleteShop)
 router.get('/list', authenticating, getAllShop)
-router.get('/detail', authenticating, getByIdShop)
+router.get('/detail/:id', authenticating, getByIdShop)
 
 module.exports = router
