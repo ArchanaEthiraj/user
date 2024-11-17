@@ -2,7 +2,7 @@ const Shop = require('../model/shopModel')
 
 const createShop = async (req, res, next) => {
   try {
-    const { shopName, userId, price ,isActive } = req.body
+    const { shopName, price, isActive } = req.body
 
     let shopRes = await Shop.findOne({ shopName: shopName, isDeleted: false })
     console.log('shopRes', shopRes)
@@ -10,7 +10,7 @@ const createShop = async (req, res, next) => {
     if (shopRes) {
       return res.status(500).json({ message: 'Shop Already Exists' })
     }
-
+    let userId = req.user.id
     const shopCreate = new Shop({
       shopName,
       userId,
@@ -29,10 +29,13 @@ const createShop = async (req, res, next) => {
 const updateShop = async (req, res) => {
   try {
     let id = req.params.id
-    if(!id){
+    if (!id) {
       return res.status(400).json({ message: 'Id Required' })
     }
     let updateShop = req.body
+    console.log('updateShop', updateShop)
+    updateShop.userId = req.user.id
+    console.log('updateShop', updateShop)
     await Shop.findByIdAndUpdate({ _id: id }, updateShop)
     return res.status(200).json({ message: 'Updated Successfully!' })
   } catch (error) {
@@ -44,7 +47,7 @@ const updateShop = async (req, res) => {
 const getByIdShop = async (req, res) => {
   try {
     let id = req.params.id
-    if(!id){
+    if (!id) {
       return res.status(400).json({ message: 'Id Required' })
     }
     let data = await Shop.findById({ _id: id })
@@ -58,7 +61,7 @@ const getByIdShop = async (req, res) => {
 const deleteShop = async (req, res) => {
   try {
     let id = req.params.id
-    if(!id){
+    if (!id) {
       return res.status(400).json({ message: 'Id Required' })
     }
     let updateShop = { isDeleted: true }
@@ -72,7 +75,7 @@ const deleteShop = async (req, res) => {
 
 const getAllShop = async (req, res) => {
   try {
-    let data = await Shop.find({ isDeleted: false })
+    let data = await Shop.find({ userId: req.user.id, isDeleted: false })
     return res.status(200).json({ message: 'Listed Successfully!', data: data })
   } catch (error) {
     return res.status(500).json({ message: 'Error', error: error })

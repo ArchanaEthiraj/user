@@ -33,7 +33,8 @@ const checkShopOwner = (req, res, next) => {
 const checkVendor = (req, res, next) => {
   try {
     let userType = req.user.userType
-    if (userType == 'Owner') {
+    if (userType == 'Vendor') {
+      console.log('userType1', userType)
       next()
     } else {
       throw 'Forbidden'

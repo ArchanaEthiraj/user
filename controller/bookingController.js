@@ -1,10 +1,14 @@
+const moment = require('moment')
 const Booking = require('../model/bookingModel')
 const Shop = require('../model/shopModel')
+const User = require('../model/userModel')
+const { sendEmail } = require('../utils/utils')
 
 const createBooking = async (req, res, next) => {
   try {
-    const { shopId, userId, shopOwnerId } = req.body
-    let bookingDate = new Date()
+    const { shopId, shopOwnerId } = req.body
+    let bookingDate = moment().format('YYYY-MM-DD')
+    let userId = req.user.id
     let bookingRes = await Booking.findOne({
       shopId,
       userId,
@@ -12,29 +16,49 @@ const createBooking = async (req, res, next) => {
       bookingStatus: 'pending',
       isDeleted: false
     })
-    console.log('bookingStatus', bookingStatus)
+    console.log('bookingStatus', bookingRes)
 
     if (bookingRes) {
       return res.status(500).json({ message: 'Shop Already Booked' })
     }
-
     const bookingCreate = new Booking({
       shopId,
       userId,
       shopOwnerId,
       bookingDate: bookingDate,
-      bookingStatus: 'pending'
+      bookingStatus: 'Pending'
     })
 
     let values = await bookingCreate.save()
     if (values) {
       // vendar and shop onwer mail functions
 
-      let confirm_link = ` v1/update?confirm=1&shopId=${shopId}&userId=${userId}&shopOnwerId=${shopOwnerId}`
-      let rejected_link = `v1/update?confirm=0&shopId=${shopId}&userId=${userId}&shopOnwerId=${shopOwnerId}`
+      let confirm_link = `http://localhost:4000/api/v1/booking/update?confirm=1&shopId=${shopId}&userId=${userId}&shopOnwerId=${shopOwnerId}`
+      let rejected_link = `http://localhost:4000/api/v1/booking/update?confirm=0&shopId=${shopId}&userId=${userId}&shopOnwerId=${shopOwnerId}`
+
+      let shopOwnerRes = await User.findOne({ _id: shopOwnerId })
+      let vendorRes = await User.findOne({ _id: userId })
+      let shopRes = await Shop.findOne({ _id: shopId })
 
       // in html button link want above there
-
+      let content = {
+        from: vendorRes.userEmail,
+        to: shopOwnerRes.userEmail,
+        htmlContent: `
+        <h1>Hi ${shopOwnerRes.userName},</h1>
+        <p>Vendor Name: ${vendorRes.userName}</p>
+        <p>Shop Name: ${shopRes.shopName}</p>
+        <p>Shop Price: ${shopRes.price}</p>
+        <p>Vendor has requested to book the shop. Do you want to accept the Deal?</p>
+        <span>
+        <a href="${confirm_link}" style="padding: 10px 20px; background-color: green; color: white; text-decoration: none; border-radius: 5px;">Confirm</a>
+        <a href="${rejected_link}" style="padding: 10px 20px; background-color: red; color: white; text-decoration: none; border-radius: 5px; margin-left: 10px;">Reject</a>
+        </span>
+        `,
+        subject: 'Shop Booking Request'
+      }
+      console.log('content', content)
+      await sendEmail(content)
       return res.status(200).json({ message: 'Booking Create Successfully!' })
     } else {
       return res.status(500).json({ message: 'Unable to Create Booking' })
@@ -98,24 +122,34 @@ const getAllBooking = async (req, res) => {
   }
 }
 
-const updateShopStatusAndBookingStatus = async (res, req, next) => {
+const updateShopStatusAndBookingStatus = async (req, res, next) => {
   try {
     // default set the bookingstatus pendingByowner
 
     let confirmStatus = req.query.confirm
+    console.log('confirmStatus', confirmStatus)
     if (confirmStatus == 1) {
-      await Shop.findByIdAndUpdate({ id: id, isActive: false })
-      await Booking.findByIdAndUpdate({
-        userId: req.query.userId,
-        bookingstatus: 'approved and paymentpending'
-      })
+      let shopQuery =await Shop.findByIdAndUpdate({ _id: req.query.shopId }, { isActive: false })
+      let bookQuery = await Booking.findOneAndUpdate(
+        {
+          userId: req.query.userId,
+          shopId: req.query.shopId
+        },
+        { bookingStatus: 'Approved and Payment Pending' }
+      )
+      console.log('req.query ---->', req.query)
+      console.log('shopQuery ---->', shopQuery)
+      console.log('bookQuery ---->', bookQuery)
       return res.status(200).json({ message: 'Approved Successfully!' })
     } else if (confirmStatus == 0) {
-      await Shop.findByIdAndUpdate({ id: id, isActive: true })
-      await Booking.findByIdAndUpdate({
-        userId: req.query.userId,
-        bookingstatus: 'bookingRejected'
-      })
+      await Shop.findByIdAndUpdate({ _id: req.query.shopId }, { isActive: true })
+      await Booking.findOneAndUpdate(
+        {
+          userId: req.query.userId,
+          shopId: req.query.shopId
+        },
+        { bookingStatus: 'Booking Rejected By Owner' }
+      )
       return res.status(200).json({ message: 'Rejected Successfully!' })
     }
   } catch (error) {

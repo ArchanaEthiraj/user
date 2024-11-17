@@ -87,7 +87,10 @@ const getByIdUser = async (req, res) => {
     if(!id){
       return res.status(400).json({ message: 'Id Required' })
     }
-    let data = await User.findById({ _id: id })
+    let data = await User.findOne({ _id: id, isDeleted: false })
+    if(!data){
+      return res.status(200).json({ message: 'No Data Found' })
+    }
     return res.status(200).json({ message: 'User Data', data: data })
   } catch (error) {
     console.log('error', error)

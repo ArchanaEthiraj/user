@@ -4,7 +4,6 @@ const shopValidate = async (req, res, next) => {
   try {
     const shopSchema = joi.object({
       shopName: joi.string().max(100).required(),
-      userId: joi.string().required(),
       price: joi.string().required(),
     })
     let { error, value } = await shopSchema.validateAsync(req.body)

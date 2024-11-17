@@ -16,7 +16,7 @@ const booking = new mongoose.Schema(
         },
         bookingStatus: {
             type: String,
-            enum: ['pending', 'approved and paymentpending', 'bookingRejectedByOnwer'], // Enum with predefined values
+            enum: ['Pending', 'Approved and Payment Pending', 'Booking Rejected By Onwer'], // Enum with predefined values
             required: true,
             default: 'pending'
         },
