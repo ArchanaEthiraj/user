@@ -10,6 +10,10 @@ const shop = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       require: true
     },
+    price: {
+      type: String,
+      default: true
+    },
     isActive: {
       type: Boolean,
       default: true

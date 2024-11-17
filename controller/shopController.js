@@ -2,7 +2,7 @@ const Shop = require('../model/shopModel')
 
 const createShop = async (req, res, next) => {
   try {
-    const { shopName, userId, isActive } = req.body
+    const { shopName, userId, price ,isActive } = req.body
 
     let shopRes = await Shop.findOne({ shopName: shopName, isDeleted: false })
     console.log('shopRes', shopRes)
@@ -14,7 +14,8 @@ const createShop = async (req, res, next) => {
     const shopCreate = new Shop({
       shopName,
       userId,
-      isActive
+      isActive,
+      price
     })
 
     await shopCreate.save()

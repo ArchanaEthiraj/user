@@ -30,5 +30,19 @@ const checkShopOwner = (req, res, next) => {
     })
   }
 }
+const checkVendor = (req, res, next) => {
+  try {
+    let userType = req.user.userType
+    if (userType == 'Owner') {
+      next()
+    } else {
+      throw 'Forbidden'
+    }
+  } catch (error) {
+    return res.json({
+      message: error
+    })
+  }
+}
 
-module.exports = { authenticating, checkShopOwner }
+module.exports = { authenticating, checkShopOwner,checkVendor }
