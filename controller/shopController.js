@@ -50,7 +50,7 @@ const getByIdShop = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: 'Id Required' })
     }
-    let data = await Shop.findById({ _id: id })
+    let data = await Shop.findById({ _id: id }).populate('userId')
     return res.status(200).json({ message: 'Shop Data', data: data })
   } catch (error) {
     console.log('error', error)
