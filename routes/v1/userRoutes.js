@@ -17,6 +17,8 @@ router.put('/update/:id', authenticating, userValidate, updateUser);
 router.delete('/delete/:id', authenticating, deleteUser);
 router.get('/list', authenticating, getAllUser);
 router.get('/detail/:id', authenticating, getByIdUser);
+router.get('/view/:id', getByIdUser);  //without authendicate 
+
 
 
 

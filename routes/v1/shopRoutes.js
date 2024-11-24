@@ -10,5 +10,7 @@ router.put('/update/:id', authenticating, checkShopOwner, shopValidate, updateSh
 router.delete('/delete/:id', authenticating, checkShopOwner, deleteShop)
 router.get('/list', authenticating, getAllShop)
 router.get('/detail/:id', authenticating, getByIdShop)
+router.get('/view/:id', getByIdShop)//without authendicate
+
 
 module.exports = router
