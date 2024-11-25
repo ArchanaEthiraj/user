@@ -2,33 +2,7 @@ const User = require('../model/userModel')
 const moment = require('moment')
 const jwt = require('jsonwebtoken')
 
-const login = async (req, res) => {
-  try {
-    const { email, password } = req.body
-    console.log('login', email, password)
-
-    let userRes = await User.findOne({ userEmail: email, isDeleted: false })
-    console.log('userRes', userRes)
-
-    if (!userRes) {
-      return res.status(500).json({ message: 'User not Found' })
-    }
-    if (userRes.password === password) {
-      let token = jwt.sign({ id: userRes.id, userType: userRes.role }, process.env.JWT_TOKEN, {
-        expiresIn: '24hr'
-      })
-      console.log('userRes', userRes.id, userRes.role)
-      console.log('token', token)
-      return res.status(200).json({ message: 'Logged in Successfully!', token: token })
-    } else {
-      return res.status(500).json({ message: 'Password does not match' })
-    }
-  } catch (error) {
-    console.log('error', error)
-    return res.status(500).json({ message: 'Error Adding User', error: error })
-  }
-}
-
+// USER CREATE API
 const addUser = async (req, res) => {
   try {
     const { userName, userPhone, userEmail, password, userDOB, role } = req.body
@@ -65,6 +39,7 @@ const addUser = async (req, res) => {
   }
 }
 
+// UPDATE USER API
 const updateUser = async (req, res) => {
   try {
     let id = req.params.id
@@ -81,6 +56,7 @@ const updateUser = async (req, res) => {
   }
 }
 
+// GET BY ID USER API
 const getByIdUser = async (req, res) => {
   try {
     let id = req.params.id
@@ -98,6 +74,7 @@ const getByIdUser = async (req, res) => {
   }
 }
 
+// DELETE USER API
 const deleteUser = async (req, res) => {
   try {
     let id = req.params.id
@@ -113,6 +90,7 @@ const deleteUser = async (req, res) => {
   }
 }
 
+// USER LIST API
 const getAllUser = async (req, res) => {
   try {
     let data = await User.find({ isDeleted: false })
@@ -122,4 +100,4 @@ const getAllUser = async (req, res) => {
   }
 }
 
-module.exports = { addUser, updateUser, getByIdUser, deleteUser, getAllUser, login }
+module.exports = { addUser, updateUser, getByIdUser, deleteUser, getAllUser }

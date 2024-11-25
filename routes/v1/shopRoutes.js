@@ -4,7 +4,7 @@ const { createShop, updateShop, deleteShop, getAllShop, getByIdShop } = require(
 const { authenticating, checkShopOwner } = require('../../middleware/userAuthenticate')
 const router = express.Router()
 
-
+// SHOP ROUTES
 router.post('/create', authenticating, checkShopOwner, shopValidate, createShop)
 router.put('/update/:id', authenticating, checkShopOwner, shopValidate, updateShop)
 router.delete('/delete/:id', authenticating, checkShopOwner, deleteShop)

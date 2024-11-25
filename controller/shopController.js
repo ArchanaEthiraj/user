@@ -1,5 +1,6 @@
 const Shop = require('../model/shopModel')
 
+// CREATE SHOP API
 const createShop = async (req, res, next) => {
   try {
     const { shopName, price, isActive } = req.body
@@ -26,6 +27,7 @@ const createShop = async (req, res, next) => {
   }
 }
 
+// UPDATE SHOP API
 const updateShop = async (req, res) => {
   try {
     let id = req.params.id
@@ -44,6 +46,7 @@ const updateShop = async (req, res) => {
   }
 }
 
+// GET BY ID API
 const getByIdShop = async (req, res) => {
   try {
     let id = req.params.id
@@ -58,6 +61,7 @@ const getByIdShop = async (req, res) => {
   }
 }
 
+// DELETE API
 const deleteShop = async (req, res) => {
   try {
     let id = req.params.id
@@ -73,6 +77,7 @@ const deleteShop = async (req, res) => {
   }
 }
 
+// SHOP LIST API
 const getAllShop = async (req, res) => {
   try {
     let data = await Shop.find({ userId: req.user.id, isDeleted: false })

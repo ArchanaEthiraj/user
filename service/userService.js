@@ -1,5 +1,6 @@
 const joi = require('joi')
 
+// LOGIN VALIDATE FUNCTION
 const loginValidate = async (req, res, next) => {
   try {
     const loginSchema = joi.object({
@@ -19,6 +20,7 @@ const loginValidate = async (req, res, next) => {
   }
 }
 
+// USER VALIDATE FUNCTION
 const userValidate = async (req, res, next) => {
   try {
     const userSchema = joi.object({

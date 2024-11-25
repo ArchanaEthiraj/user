@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// USER SCHEMA
 const user = new mongoose.Schema(
   {
     userName: {
@@ -29,6 +30,9 @@ const user = new mongoose.Schema(
       type: String,
       require: true,
       enum: ['Vendor', 'Shop Owner']
+    },
+    otp: {
+      type: String
     },
     isActive: {
       type: Boolean,

@@ -1,5 +1,6 @@
 const joi = require('joi')
 
+// SHOP VALIDATE FUNCTION
 const shopValidate = async (req, res, next) => {
   try {
     const shopSchema = joi.object({
